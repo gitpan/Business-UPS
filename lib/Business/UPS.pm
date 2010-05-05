@@ -18,7 +18,7 @@ require Exporter;
 #	Copyright 1998 Mark Solomon <msolomon@seva.net> (See GNU GPL)
 #	Started 01/07/1998 Mark Solomon 
 
-$VERSION = do { my @r = (q$Revision: 2.0 $ =~ /\d+/g); sprintf "%d."."%02d" x $#r, @r }; # must be all one line, for MakeMaker
+$VERSION = '2.01';
 
 sub getUPS {
 
@@ -94,11 +94,11 @@ sub UPStrack {
     $post_data{"${imagename}.x"} = 0;
     $post_data{"${imagename}.y"} = 0;
     
-    my $result = $lwp->post($url, \%post_data, Referer => "http://wwwaaps.ups.com/tracking/tracking.cgi?tracknum=$tracking_number");
+    my $result2 = $lwp->post($url, \%post_data, Referer => "http://wwwaaps.ups.com/tracking/tracking.cgi?tracknum=$tracking_number");
 
-    Error("Failed fetching tracking data from UPS!") unless $result->is_success;
+    Error("Failed fetching tracking data from UPS!") unless $result2->is_success;
     
-    my $raw_data = $result->content();
+    my $raw_data = $result2->content();
     
     $raw_data =~ tr/\r//d;
     $raw_data =~ s/<.*?>//gims;
@@ -226,7 +226,7 @@ Business::UPS - A UPS Interface Module
   print "UPS Zone is $ups_zone\n";
 
   %track = UPStrack("z10192ixj29j39");
-  $track{error} and die "ERROR: $track{error};
+  $track{error} and die "ERROR: $track{error}";
 
   # 'Delivered' or 'In-transit'
   print "This package is $track{Current Status}\n"; 
